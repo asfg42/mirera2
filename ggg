@@ -1,0 +1,53 @@
+import pygame
+import sys
+
+# Инициализация pygame и создание окна
+pygame.init()
+screen = pygame.display.set_mode((300, 500))
+clock = pygame.time.Clock()
+
+# Загрузка изображения фона
+background = pygame.image.load("background.jpg")
+background = pygame.transform.scale(background, (1000, 800))
+
+# Функция отображения начального окна
+def draw_start_screen():
+    font = pygame.font.Font(None, 38)
+    title_text = font.render("Running along the road", True, (0, 128, 0))
+    start_text = font.render("Старт", True, (0, 128, 0))
+    exit_text = font.render("Выход", True, (0, 128, 0))
+    title_rect = title_text.get_rect(center=(150, 150))
+    start_rect = start_text.get_rect(center=(150, 250))
+    exit_rect = exit_text.get_rect(center=(150, 300))
+
+    screen.blit(title_text, title_rect)
+    screen.blit(start_text, start_rect)
+    screen.blit(exit_text, exit_rect)
+
+    return start_rect, exit_rect
+
+# Игровой цикл
+running = True
+game_started = False
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.MOUSEBUTTONDOWN and not game_started:
+            start_rect, exit_rect = draw_start_screen()
+            if start_rect.collidepoint(event.pos):
+                game_started = True
+
+    screen.blit(background, (0, 0))
+
+    if not game_started:
+        start_rect, exit_rect = draw_start_screen()
+    else:
+        screen.blit(coin_image, (coin_x, coin_y))
+        draw_coin_counter()
+
+    pygame.display.flip()
+    clock.tick(60)
+
+pygame.quit()
+sys.exit()
